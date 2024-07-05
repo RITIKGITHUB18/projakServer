@@ -78,12 +78,16 @@ exports.createBlog = async (req, res) => {
       req.files.thumbnail[0],
       "blogs/thumbnail"
     );
+    const mainImage = await uploadImageToFirebase(
+      req.files.mainImage[0],
+      "blogs/mainImage"
+    );
 
     // Create blog in the database
     const blog = await Blog.create({
       title,
-      mainImage:
-        "https://firebasestorage.googleapis.com/v0/b/projak-2024.appspot.com/o/blogs%2FsecondHeaderImage.svg?alt=media&token=25c8d1c9-2483-4163-be4c-0a6f429453e6",
+      mainImage: mainImage,
+      // "https://firebasestorage.googleapis.com/v0/b/projak-2024.appspot.com/o/blogs%2FsecondHeaderImage.svg?alt=media&token=25c8d1c9-2483-4163-be4c-0a6f429453e6",
       thumbnail: thumbnail,
       name,
       post,
@@ -179,6 +183,12 @@ exports.updateBlog = async (req, res) => {
       blogData.thumbnail = await uploadImageToFirebase(
         req.files.thumbnail[0],
         "blogs/thumbnail"
+      );
+    }
+    if (req.files.mainImage) {
+      blogData.mainImage = await uploadImageToFirebase(
+        req.files.mainImage[0],
+        "blogs/mainImage"
       );
     }
 
